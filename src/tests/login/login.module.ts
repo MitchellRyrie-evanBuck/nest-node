@@ -1,6 +1,13 @@
-import { Global, Module } from '@nestjs/common';
+import {
+  Global,
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { LoginService } from './login.service';
 import { LoginController } from './login.controller';
+import { Logger } from '@/Log/Logger';
 
 @Global()
 @Module({
@@ -8,4 +15,12 @@ import { LoginController } from './login.controller';
   providers: [LoginService],
   exports: [LoginService],
 })
-export class LoginModule {}
+export class LoginModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    // consumer.apply(Logger).forRoutes({
+    //   path: 'login',
+    //   method: RequestMethod.GET,
+    // });
+    consumer.apply(Logger).forRoutes(LoginController);
+  }
+}

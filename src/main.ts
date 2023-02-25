@@ -1,17 +1,34 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { VersioningType } from '@nestjs/common';
+import { VersioningType, ValidationPipe } from '@nestjs/common';
 import * as session from 'express-session';
-
+import * as cors from 'cors';
 import { AppModule } from './app.module';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { Response } from '@/common/response';
+import { HttpFilter } from '@/common/filter';
+import { join } from 'path';
+import { LoginGuard } from '@/tests/login/login.guard';
+
+const whiteList = ['/list'];
+function middleWareAll(req, res, next) {
+  // console.log(req.originalUrl, '我收全局的');
+
+  // if (whiteList.includes(req.originalUrl)) {
+  next();
+  // } else {
+  // res.send('小黑子露出鸡脚了吧');
+  // }
+}
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.enableVersioning({
     type: VersioningType.URI,
   });
   const config = new DocumentBuilder()
-    .setTitle('Cats example')
+    .addBearerAuth()
+    .setTitle('孝文文档')
     .setDescription('The cats API description')
     .setVersion('1.0')
     .addTag('apidoc')
@@ -25,8 +42,16 @@ async function bootstrap() {
       cookie: { maxAge: null }, //在每次请求时强行设置 cookie，这将重置 cookie 过期时间(默认:false)
     }),
   );
-  SwaggerModule.setup('api', app, document);
-
+  app.useStaticAssets(join(__dirname, 'images'), {
+    prefix: '/AFL',
+  });
+  app.use(cors());
+  app.use(middleWareAll);
+  SwaggerModule.setup('/api-docs', app, document);
+  app.useGlobalInterceptors(new Response());
+  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalFilters(new HttpFilter());
+  // app.useGlobalGuards(new LoginGuard()); // 全局守卫
   await app.listen(3000);
 }
 bootstrap();
