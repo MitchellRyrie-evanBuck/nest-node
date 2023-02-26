@@ -6,6 +6,7 @@ import { AdminModule } from './tests/admin/admin.module';
 import { LoginModule } from './tests/login/login.module';
 import { ConfigModule } from './config/config.module';
 import { UploadModule } from './tests/upload/upload.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
@@ -16,6 +17,16 @@ import { UploadModule } from './tests/upload/upload.module';
       path: 'AFL',
     }),
     UploadModule,
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      username: 'root',
+      password: '809000liuLIU',
+      host: '127.0.0.1',
+      port: 3306,
+      database: 'golang',
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      synchronize: true,
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],

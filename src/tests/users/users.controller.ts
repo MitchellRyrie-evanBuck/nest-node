@@ -44,7 +44,9 @@ export class UsersController {
   findOne(@Param('id') id: string, @Headers() header) {
     console.log(id, '------');
     console.log(header, 'header');
-    console.log(this.LoginService.findAll());
+    console.log(
+      this.LoginService.findAll({ keyWord: 'lui', page: 1, pageSize: 10 }),
+    );
     return this.usersService.findOne(+id);
   }
 

@@ -78,6 +78,11 @@ export class LoginController {
     }
   }
 
+  @Post('/add/tags')
+  addTags(@Body() params: { tags: string[]; userId: number }) {
+    return this.loginService.addTags(params);
+  }
+
   @Post()
   create(@Body(PipePipe) createLoginDto: CreateLoginDto) {
     return this.loginService.create(createLoginDto);
@@ -86,7 +91,7 @@ export class LoginController {
   @Get()
   @SetMetadata('role', ['admin'])
   findAll() {
-    return this.loginService.findAll();
+    return this.loginService.findAll({ keyWord: 'lui', page: 1, pageSize: 10 });
   }
 
   @Get(':id')
