@@ -1,19 +1,19 @@
 {
   "compilerOptions": {
+    "lib": ["es5", "es6"],
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,
+    "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "target": "es2017",
     "sourceMap": true,
     "outDir": "./dist",
-     "baseUrl": "./",
+    "baseUrl": "./",
     "paths": {
-      "@/*": [
-        "src/*"
-      ]
+      "@/*": ["src/*"]
     },
     "incremental": true,
     "skipLibCheck": true,
