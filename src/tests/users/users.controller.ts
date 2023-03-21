@@ -14,7 +14,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { LoginService } from '../login/login.service';
-
+import { ConfigService } from '@nestjs/config';
 @Controller({
   path: 'users',
   version: '1',
@@ -23,7 +23,7 @@ export class UsersController {
   // eslint-disable-next-line prettier/prettier
   constructor(
     private readonly usersService: UsersService,
-    private readonly LoginService: LoginService,
+    private readonly LoginService: LoginService, // private configService: ConfigService,
   ) {}
 
   @Post()
@@ -47,6 +47,7 @@ export class UsersController {
     console.log(
       this.LoginService.findAll({ keyWord: 'lui', page: 1, pageSize: 10 }),
     );
+    // console.log('configService', this.configService);
     return this.usersService.findOne(+id);
   }
 
