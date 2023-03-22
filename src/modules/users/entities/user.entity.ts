@@ -10,6 +10,7 @@ import {
   OneToMany,
 } from 'typeorm';
 
+@Entity()
 export class UserGurad {
   @PrimaryGeneratedColumn()
   id: number;

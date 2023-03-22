@@ -14,10 +14,10 @@ export class UsersService {
   async create(createUserDto: CreateUserDto) {
     console.log('createUserDto',createUserDto)
     const userInfo = await this.user.findOne({ where: { name: createUserDto.name } })
-    // console.log('userInfo',userInfo)
-    // if(userInfo){
-    //   return '已有该用户'
-    // }
+    console.log('userInfo',userInfo)
+    if(userInfo){
+      return '已有该用户'
+    }
     this.user.save(createUserDto)
     return 'This action adds a new user';
   }
