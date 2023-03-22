@@ -20,7 +20,7 @@ import { UpdateLoginDto } from './dto/update-login.dto';
 import { PipePipe } from './login.pipe';
 import * as svgCaptcha from 'svg-captcha';
 import * as uuid from 'uuid';
-import { LoginGuard } from './login.guard';
+// import { LoginGuard } from './login.guard';
 import {
   ApiTags,
   ApiOperation,
@@ -31,20 +31,16 @@ import {
 } from '@nestjs/swagger';
 console.log(uuid.v4);
 
-@Controller({
-  path: 'login',
-  version: '1',
-})
+@Controller({ path: 'login', version: '1',})
 @ApiTags('登录接口')
 @ApiBearerAuth()
-@UseGuards(LoginGuard)
+// @UseGuards(LoginGuard)
 export class LoginController {
-  // eslint-disable-next-line prettier/prettier
   constructor(private readonly loginService: LoginService) {}
 
   @ApiOperation({
-    summary: '测试login',
-    description: '请求该接口需要amdin权限',
+    summary: '获取验证码',
+    description: '请求该接口获取code验证码',
   })
   @ApiResponse({ status: 403, description: '自定义返回信息' })
   @ApiParam({ name: '', description: '获取二维码', required: true })
@@ -62,20 +58,14 @@ export class LoginController {
     res.send(captcha.data);
   }
 
-  @Post('create')
-  createUser(@Req() req, @Body() body) {
-    console.log(req.session.code, body);
-    if (
-      req.session.code.toLocaleLowerCase() === body?.code?.toLocaleLowerCase()
-    ) {
-      return {
-        message: '验证码正确',
-      };
-    } else {
-      return {
-        message: '验证码错误',
-      };
+  @Post('')
+  loginAdmin(@Req() req, @Body( ) body) {
+    const { name, password, code } = body.code
+    console.log('req.session', req.session)
+    if ( req.session.code.toLocaleLowerCase() === code?.toLocaleLowerCase() ) {
+      
     }
+    return ''
   }
 
   @Post('/add/tags')
@@ -83,10 +73,6 @@ export class LoginController {
     return this.loginService.addTags(params);
   }
 
-  @Post()
-  create(@Body(PipePipe) createLoginDto: CreateLoginDto) {
-    return this.loginService.create(createLoginDto);
-  }
 
   @Get()
   @SetMetadata('role', ['admin'])

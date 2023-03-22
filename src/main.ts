@@ -8,7 +8,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { Response } from '@/common/response';
 import { HttpFilter } from '@/common/filter';
 import { join } from 'path';
-import { LoginGuard } from '@/tests/login/login.guard';
+import { LoginGuard } from '@/modules/login/login.guard';
 
 const whiteList = ['/list'];
 function middleWareAll(req, res, next) {
@@ -28,7 +28,7 @@ async function bootstrap() {
   });
   const config = new DocumentBuilder()
     .addBearerAuth()
-    .setTitle('孝文文档')
+    .setTitle('node')
     .setDescription('The cats API description')
     .setVersion('1.0')
     .addTag('apidoc')
@@ -48,9 +48,9 @@ async function bootstrap() {
   app.use(cors());
   app.use(middleWareAll);
   SwaggerModule.setup('/api-docs', app, document);
-  app.useGlobalInterceptors(new Response());
-  app.useGlobalPipes(new ValidationPipe());
-  app.useGlobalFilters(new HttpFilter());
+  // app.useGlobalInterceptors(new Response());
+  // app.useGlobalPipes(new ValidationPipe());
+  // app.useGlobalFilters(new HttpFilter());
   // app.useGlobalGuards(new LoginGuard()); // 全局守卫
   await app.listen(3000);
 }

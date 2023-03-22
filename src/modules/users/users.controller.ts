@@ -15,10 +15,15 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { LoginService } from '../login/login.service';
 import { ConfigService } from '@nestjs/config';
+import type { request } from 'express';
+import { userPipe } from './users.pipe';
+import { ApiOperation, ApiTags, ApiParam, ApiResponse, ApiBody } from '@nestjs/swagger'
+
 @Controller({
   path: 'users',
   version: '1',
 })
+@ApiTags('用户接口')
 export class UsersController {
   // eslint-disable-next-line prettier/prettier
   constructor(
@@ -26,12 +31,19 @@ export class UsersController {
     private readonly LoginService: LoginService, // private configService: ConfigService,
   ) {}
 
-  @Post()
-  create(@Request() req) {
-    return {
-      code: 200,
-      data: req.body,
-    };
+  @ApiOperation({
+    summary: '创建用户',
+    description: '请求该接口创建一个新的用户',
+  })
+  // @ApiBody({ description: '用户名',required: true})
+  @ApiResponse({ status: 201, description: '创建成功' })
+  @Post('create-user')
+  create(@Request() req, @Body(userPipe) createUserDto: CreateUserDto ) {
+    this.usersService.create(createUserDto)
+    // return {
+    //   code: 200,
+    //   data: req.body,
+    // };
   }
 
   @Get()
