@@ -5,19 +5,40 @@ import {
   Body,
   Patch,
   Param,
+  Query,
   Delete,
   Request,
   Headers,
   HttpCode,
+  UseInterceptors,
+  CacheInterceptor,
+  ClassSerializerInterceptor
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { LoginService } from '../login/login.service';
 import { ConfigService } from '@nestjs/config';
-import type { request } from 'express';
-import { userPipe } from './users.pipe';
-import { ApiOperation, ApiTags, ApiParam, ApiResponse, ApiBody } from '@nestjs/swagger'
+import { query, request } from 'express';
+import { userPipe } from '@/pipe/index';
+import { ApiOperation, ApiTags, ApiParam, ApiOkResponse, ApiResponse, ApiBody } from '@nestjs/swagger'
+import {
+  CreateUserResult,
+  DeleteUsersResult,
+  FindUserResult,
+  FindUsersResult,
+  PaginateResult,
+  UpdateUserResult
+} from './results'
+
+import {
+  CreateUserDTO,
+  DeleteUsersDTO,
+  FindUserDTO,
+  PaginateUserDTO,
+  UpdateUserDTO
+} from './dto'
+
+import { PaginateSerialize, UserSerialize } from './serializes'
+
 
 @Controller({
   path: 'users',
@@ -25,30 +46,31 @@ import { ApiOperation, ApiTags, ApiParam, ApiResponse, ApiBody } from '@nestjs/s
 })
 @ApiTags('用户接口')
 export class UsersController {
-  // eslint-disable-next-line prettier/prettier
   constructor(
     private readonly usersService: UsersService,
-    private readonly LoginService: LoginService, // private configService: ConfigService,
+    private readonly LoginService: LoginService, 
   ) {}
 
   @ApiOperation({
     summary: '创建用户',
     description: '请求该接口创建一个新的用户',
   })
-  // @ApiBody({ description: '用户名',required: true})
+  @ApiOkResponse({ description: 'OK', type: CreateUserResult })
   @ApiResponse({ status: 201, description: '创建成功' })
   @Post('create-user')
-  create(@Request() req, @Body(userPipe) createUserDto: CreateUserDto ) {
-    this.usersService.create(createUserDto)
-    // return {
-    //   code: 200,
-    //   data: req.body,
-    // };
+  async create(@Request() req, @Body(userPipe) createUserDto: CreateUserDTO ) {
+    await this.usersService.create(createUserDto)
+    return true
   }
 
-  @Get()
-  findAll() {
-    return this.usersService.findAll();
+  @Get('/list')
+  @ApiOperation({ summary: '查找多个用户' })
+  @ApiOkResponse({ description: 'OK', type: PaginateResult })
+  // @UseInterceptors(ClassSerializerInterceptor, CacheInterceptor)
+  @UseInterceptors(ClassSerializerInterceptor)
+  async findAll(@Query() dto: FindUserDTO) {
+    const data = await this.usersService.findAll(dto);
+    return data.map(item => new UserSerialize(item))
   }
 
   @Get(':id')
@@ -64,7 +86,7 @@ export class UsersController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDTO) {
     return this.usersService.update(+id, updateUserDto);
   }
 

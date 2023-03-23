@@ -12,7 +12,6 @@ export class userPipe implements PipeTransform{
       if (errors.length){
         throw new HttpException(errors, HttpStatus.BAD_REQUEST)
       }
-      console.log('errors', errors)
       return value
   }
 }

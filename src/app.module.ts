@@ -8,7 +8,7 @@ import { ConfigModule } from './config/config.module';
 import { UploadModule } from '@/modules/upload/upload.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './modules/auth/auth.module';
-import { UserGurad } from '@/modules/users/entities/user.entity'
+import { UserGurad } from '@/entities/index'
 
 @Module({
   imports: [

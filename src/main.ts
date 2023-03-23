@@ -9,6 +9,8 @@ import { Response } from '@/common/response';
 import { HttpFilter } from '@/common/filter';
 import { join } from 'path';
 import { LoginGuard } from '@/modules/login/login.guard';
+import { HttpExceptionFilter } from '@/filters/http-exception.filter'
+import { TransformInterceptor } from '@/Interceptor/transform.interceptor';
 
 const whiteList = ['/list'];
 function middleWareAll(req, res, next) {
@@ -52,6 +54,8 @@ async function bootstrap() {
   // app.useGlobalPipes(new ValidationPipe());
   // app.useGlobalFilters(new HttpFilter());
   // app.useGlobalGuards(new LoginGuard()); // 全局守卫
+  // app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalInterceptors(new TransformInterceptor());
   await app.listen(3000);
 }
 bootstrap();

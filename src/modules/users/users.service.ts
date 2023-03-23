@@ -1,7 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { UserGurad } from './entities/user.entity';
+import { Injectable, BadRequestException } from '@nestjs/common';
+import { CreateUserDTO, FindUserDTO, UpdateUserDTO } from './dto';
+import { UserGurad } from '@/entities/index';
 import { Repository, Like } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -11,26 +10,24 @@ export class UsersService {
     @InjectRepository(UserGurad) private readonly user: Repository<UserGurad>
   ){}
 
-  async create(createUserDto: CreateUserDto) {
-    console.log('createUserDto',createUserDto)
+  async create(createUserDto: CreateUserDTO) {
     const userInfo = await this.user.findOne({ where: { name: createUserDto.name } })
-    console.log('userInfo',userInfo)
-    if(userInfo){
-      return '已有该用户'
+    if(userInfo?.name){
+      throw new BadRequestException('更新失败，用户已存在')
     }
-    this.user.save(createUserDto)
-    return 'This action adds a new user';
+    await this.user.save(createUserDto)
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll(dto: any) {
+    console.log('dto',dto)
+    return await this.user.find(dto)
   }
 
   findOne(id: number) {
     return `This action returns a #${id} user`;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
+  update(id: number, updateUserDto: UpdateUserDTO) {
     return `This action updates a #${id} user`;
   }
 

@@ -1,0 +1,6 @@
+export * from './create-user.result'
+export * from './delete-users.result'
+export * from './find-user.result'
+export * from './find-users.result'
+export * from './paginate.result'
+export * from './update-user.result'
