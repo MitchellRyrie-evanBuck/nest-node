@@ -73,16 +73,13 @@ export class UsersController {
     return data.map(item => new UserSerialize(item))
   }
 
-  @Get(':id')
+  @Get('/one')
   @HttpCode(200)
-  findOne(@Param('id') id: string, @Headers() header) {
-    console.log(id, '------');
-    console.log(header, 'header');
-    console.log(
-      this.LoginService.findAll({ keyWord: 'lui', page: 1, pageSize: 10 }),
-    );
-    // console.log('configService', this.configService);
-    return this.usersService.findOne(+id);
+  @UseInterceptors(ClassSerializerInterceptor)
+  async findOne(@Query() query: FindUserDTO) {
+    const data = await this.usersService.findOne(query);
+    console.log('data-----',data)
+    return new UserSerialize(data)
   }
 
   @Patch(':id')

@@ -19,16 +19,19 @@ export class UsersService {
   }
 
   async findAll(dto: any) {
-    console.log('dto',dto)
     return await this.user.find(dto)
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(dto: any) {
+    const data = await this.user.findOne({ where: { id : dto.id } })
+    if(!data){
+      throw new BadRequestException('用户不存在')
+    }
+    return data
   }
 
   update(id: number, updateUserDto: UpdateUserDTO) {
-    return `This action updates a #${id} user`;
+    // this.user.findOne()
   }
 
   remove(id: number) {
