@@ -57,6 +57,8 @@ export class UsersController {
   })
   @ApiOkResponse({ description: 'OK', type: CreateUserResult })
   @ApiResponse({ status: 201, description: '创建成功' })
+  @ApiParam({ name: 'name', description: '姓名', required: true })
+  @ApiParam({ name: 'password', description: '密码', required: true })
   @Post('create-user')
   async create(@Request() req, @Body(userPipe) createUserDto: CreateUserDTO ) {
     await this.usersService.create(createUserDto)
@@ -64,7 +66,7 @@ export class UsersController {
   }
 
   @Get('/list')
-  @ApiOperation({ summary: '查找多个用户' })
+  @ApiOperation({ summary: '获取用户列表' })
   @ApiOkResponse({ description: 'OK', type: PaginateResult })
   // @UseInterceptors(ClassSerializerInterceptor, CacheInterceptor)
   @UseInterceptors(ClassSerializerInterceptor)
@@ -75,6 +77,8 @@ export class UsersController {
 
   @Get('/one')
   @HttpCode(200)
+  @ApiOperation({ summary: '根据ID查询用户' })
+  @ApiOkResponse({ description: 'OK', type: PaginateResult })
   @UseInterceptors(ClassSerializerInterceptor)
   async findOne(@Query() query: FindUserDTO) {
     const data = await this.usersService.findOne(query);

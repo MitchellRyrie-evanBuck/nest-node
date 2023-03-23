@@ -13,7 +13,7 @@ export class UsersService {
   async create(createUserDto: CreateUserDTO) {
     const userInfo = await this.user.findOne({ where: { name: createUserDto.name } })
     if(userInfo?.name){
-      throw new BadRequestException('更新失败，用户已存在')
+      throw new BadRequestException('创建失败，用户已存在')
     }
     await this.user.save(createUserDto)
   }
