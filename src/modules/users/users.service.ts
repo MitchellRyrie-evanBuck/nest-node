@@ -1,24 +1,27 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { CreateUserDTO, FindUserDTO, UpdateUserDTO } from './dto';
-import { UserGurad } from '@/entities/index';
+import { UserEntity } from '@/entities/index';
 import { Repository, Like } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ICrudService } from '@/types'
 
 @Injectable()
-export class UsersService {
+export class UsersService implements ICrudService {
   constructor(
-    @InjectRepository(UserGurad) private readonly user: Repository<UserGurad>
+    @InjectRepository(UserEntity) private readonly user: Repository<UserEntity>
   ){}
 
-  async create(createUserDto: CreateUserDTO) {
-    const userInfo = await this.user.findOne({ where: { name: createUserDto.name } })
-    if(userInfo?.name){
+  async createOne(createUserDto: CreateUserDTO) {
+    const userInfo = await this.user.findOne({ where:{
+      username: createUserDto.username
+    } });
+    if(userInfo){
       throw new BadRequestException('创建失败，用户已存在')
     }
     await this.user.save(createUserDto)
   }
 
-  async findAll(dto: any) {
+  async findMany(dto: any) {
     return await this.user.find(dto)
   }
 
@@ -30,11 +33,18 @@ export class UsersService {
     return data
   }
 
-  update(id: number, updateUserDto: UpdateUserDTO) {
-    // this.user.findOne()
+  async updateOne(id: number, updateUserDto: UpdateUserDTO) {
+    const existingUser = await this.user.findOne({ where:{ id } })
+    if (!existingUser) {
+      throw new BadRequestException('更新失败，用户已存在')
+    }
+    existingUser.gender = updateUserDto.gender
+    existingUser.age = updateUserDto.age
+    existingUser.mobile = updateUserDto.mobile
+    this.user.save(existingUser)
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async deleteOne(id: number) {
+    await this.user.delete(id)
   }
 }

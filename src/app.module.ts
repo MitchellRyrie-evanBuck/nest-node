@@ -8,7 +8,7 @@ import { ConfigModule } from './config/config.module';
 import { UploadModule } from '@/modules/upload/upload.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './modules/auth/auth.module';
-import { UserGurad } from '@/entities/index'
+import { UserEntity } from '@/entities/index'
 
 @Module({
   imports: [
@@ -28,7 +28,7 @@ import { UserGurad } from '@/entities/index'
       port: 3306,
       database: 'node',
       // entities: [__dirname + 'src/**/*.entity{.ts,.js}'],
-      entities: [UserGurad],
+      entities: [UserEntity],
       synchronize: true,
     }),
     AuthModule,

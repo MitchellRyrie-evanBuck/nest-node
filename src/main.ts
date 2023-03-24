@@ -49,7 +49,7 @@ async function bootstrap() {
   });
   app.use(cors());
   app.use(middleWareAll);
-  SwaggerModule.setup('/api-docs', app, document);
+  SwaggerModule.setup('/api/docs', app, document);
   // app.useGlobalInterceptors(new Response());
   // app.useGlobalPipes(new ValidationPipe());
   // app.useGlobalFilters(new HttpFilter());

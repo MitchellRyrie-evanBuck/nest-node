@@ -5,9 +5,11 @@ import {
   Body,
   Patch,
   Param,
+  Put,
   Query,
   Delete,
   Request,
+  Req,
   Headers,
   HttpCode,
   UseInterceptors,
@@ -17,7 +19,7 @@ import {
 import { UsersService } from './users.service';
 import { LoginService } from '../login/login.service';
 import { ConfigService } from '@nestjs/config';
-import { query, request } from 'express';
+import type {  query, request } from 'express';
 import { userPipe } from '@/pipe/index';
 import { ApiOperation, ApiTags, ApiParam, ApiOkResponse, ApiResponse, ApiBody } from '@nestjs/swagger'
 import {
@@ -51,17 +53,14 @@ export class UsersController {
     private readonly LoginService: LoginService, 
   ) {}
 
-  @ApiOperation({
-    summary: '创建用户',
-    description: '请求该接口创建一个新的用户',
-  })
+  @ApiOperation({ summary: '创建用户'})
   @ApiOkResponse({ description: 'OK', type: CreateUserResult })
   @ApiResponse({ status: 201, description: '创建成功' })
   @ApiParam({ name: 'name', description: '姓名', required: true })
   @ApiParam({ name: 'password', description: '密码', required: true })
   @Post('create-user')
-  async create(@Request() req, @Body(userPipe) createUserDto: CreateUserDTO ) {
-    await this.usersService.create(createUserDto)
+  async create(@Body(userPipe) createUserDto: CreateUserDTO ) {
+    await this.usersService.createOne(createUserDto)
     return true
   }
 
@@ -71,7 +70,7 @@ export class UsersController {
   // @UseInterceptors(ClassSerializerInterceptor, CacheInterceptor)
   @UseInterceptors(ClassSerializerInterceptor)
   async findAll(@Query() dto: FindUserDTO) {
-    const data = await this.usersService.findAll(dto);
+    const data = await this.usersService.findMany(dto);
     return data.map(item => new UserSerialize(item))
   }
 
@@ -86,13 +85,20 @@ export class UsersController {
     return new UserSerialize(data)
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDTO) {
-    return this.usersService.update(+id, updateUserDto);
+  @Put('/update/:id')
+  @ApiOperation({ summary: '更新一个用户' })
+  @ApiOkResponse({ description: 'OK', type: UpdateUserResult })
+  async update(@Param('id') id: string, @Req() req , @Body(userPipe) updateUserDto: UpdateUserDTO) {
+    console.log('req', req)
+    await this.usersService.updateOne(+id, updateUserDto);
+    return true
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  @Delete('delete/:id')
+  @ApiOperation({ summary: '删除一个用户' })
+  @ApiOkResponse({ description: 'OK', type: DeleteUsersResult })
+  async remove(@Param('id') id: string) {
+    await this.usersService.deleteOne(+id);
+    return true
   }
 }

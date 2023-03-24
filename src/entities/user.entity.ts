@@ -1,33 +1,60 @@
 import {
   Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  BeforeInsert,
   CreateDateColumn,
+  Entity,
   Generated,
-  OneToOne,
-  JoinColumn,
-  OneToMany,
-} from 'typeorm';
+  PrimaryGeneratedColumn,
+  UpdateDateColumn
+} from 'typeorm'
 
-@Entity()
-export class UserGurad {
+import { GenderEnum } from '@/enums'
+
+@Entity('user')
+export class UserEntity {
   @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column({ type: 'varchar', length: 255 })
-  name: string;
-
-  @Column({ type: 'varchar', length: 255 })
-  password: string;
+  id: number
 
   @Generated('uuid')
-  uuid: string;
+  @Column({
+    name: 'user_id',
+    comment: '用户编号'
+  })
+  userId: string
 
-  @Column({ type: 'boolean', default: false })
-  freeze: boolean;
+  @Column({
+    comment: '用户账号'
+  })
+  username: string
 
-  @CreateDateColumn({ type: 'timestamp' })
-  createTime: Date;
+  @Column({
+    comment: '用户密码'
+  })
+  password!: string
 
+  @Column({
+    nullable: true
+  })
+  gender: GenderEnum
+
+  @Column({
+    nullable: true
+  })
+  age: number
+
+  @Column({
+    nullable: true
+  })
+  mobile: string
+
+  @CreateDateColumn({
+    name: 'create_at',
+    comment: '创建时间'
+  })
+  createAt: Date
+
+  @UpdateDateColumn({
+    name: 'update_at',
+    comment: '更新时间'
+  })
+  updateAt: Date
 }
