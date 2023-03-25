@@ -13,6 +13,7 @@ import {
   ParseUUIDPipe,
   UseGuards,
   SetMetadata,
+  NotFoundException,
 } from '@nestjs/common';
 import { LoginService } from './login.service';
 import { CreateLoginDto } from './dto/create-login.dto';
@@ -21,6 +22,7 @@ import { PipePipe } from './login.pipe';
 import * as svgCaptcha from 'svg-captcha';
 import * as uuid from 'uuid';
 // import { LoginGuard } from './login.guard';
+import { LoginDTO } from './dto/index';
 import {
   ApiTags,
   ApiOperation,
@@ -28,10 +30,12 @@ import {
   ApiProperty,
   ApiResponse,
   ApiBearerAuth,
+  ApiBody,
+  ApiOkResponse,
 } from '@nestjs/swagger';
-console.log(uuid.v4);
+import { TokenResponse } from './results';
 
-@Controller({ path: 'login', version: '1',})
+@Controller({ path: 'login', version: '1' })
 @ApiTags('登录接口')
 @ApiBearerAuth()
 // @UseGuards(LoginGuard)
@@ -59,20 +63,25 @@ export class LoginController {
   }
 
   @Post('')
-  loginAdmin(@Req() req, @Body( ) body) {
-    const { name, password, code } = body.code
-    console.log('req.session', req.session)
-    if ( req.session.code.toLocaleLowerCase() === code?.toLocaleLowerCase() ) {
-      
+  @ApiBody({ type: LoginDTO })
+  @ApiOkResponse({ description: '登陆', type: TokenResponse })
+  loginAdmin(@Req() req, @Body() body: LoginDTO) {
+    const { mobile, password, code } = body;
+    console.log('req.session', req.session);
+    console.log('req.session', req.session);
+    if (!req.session?.code) {
+      throw new NotFoundException('验证码已过期，请刷新重试');
     }
-    return ''
+    if (req.session.code.toLocaleLowerCase() !== code?.toLocaleLowerCase()) {
+      throw new NotFoundException('验证码不正确，请刷新重试');
+    }
+    return this.loginService.login(body);
   }
 
   @Post('/add/tags')
   addTags(@Body() params: { tags: string[]; userId: number }) {
     return this.loginService.addTags(params);
   }
-
 
   @Get()
   @SetMetadata('role', ['admin'])

@@ -4,57 +4,67 @@ import {
   Entity,
   Generated,
   PrimaryGeneratedColumn,
-  UpdateDateColumn
-} from 'typeorm'
+  UpdateDateColumn,
+} from 'typeorm';
 
-import { GenderEnum } from '@/enums'
+import { GenderEnum } from '@/enums';
 
 @Entity('user')
 export class UserEntity {
   @PrimaryGeneratedColumn()
-  id: number
+  id: number;
 
   @Generated('uuid')
   @Column({
     name: 'user_id',
-    comment: '用户编号'
+    comment: '用户编号',
   })
-  userId: string
+  userId: string;
 
   @Column({
-    comment: '用户账号'
+    comment: '用户账号',
   })
-  username: string
+  username: string;
+
+  // 软删除
+  @Column({
+    default: false,
+  })
+  isDelete: boolean;
+
+  // 加密盐
+  @Column('text', { select: false })
+  salt: string;
 
   @Column({
-    comment: '用户密码'
+    comment: '用户密码',
   })
-  password!: string
+  password!: string;
 
   @Column({
-    nullable: true
+    nullable: true,
   })
-  gender: GenderEnum
+  gender: GenderEnum;
 
   @Column({
-    nullable: true
+    nullable: true,
   })
-  age: number
+  age: number;
 
   @Column({
-    nullable: true
+    nullable: true,
   })
-  mobile: string
+  mobile: string;
 
   @CreateDateColumn({
     name: 'create_at',
-    comment: '创建时间'
+    comment: '创建时间',
   })
-  createAt: Date
+  createAt: Date;
 
   @UpdateDateColumn({
     name: 'update_at',
-    comment: '更新时间'
+    comment: '更新时间',
   })
-  updateAt: Date
+  updateAt: Date;
 }

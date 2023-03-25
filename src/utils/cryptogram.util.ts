@@ -1,0 +1,26 @@
+import * as crypto from 'crypto';
+
+// 随机盐
+export function makeSalt(): string {
+  return crypto.randomBytes(3).toString('base64');
+}
+
+/**
+ * 使用盐加密明文密码
+ * @param password 密码
+ * @param salt 密码盐
+ */
+export function encryptPassword(password: string, salt: string): string {
+  console.log('password', password);
+  console.log('salt', salt);
+
+  if (!password || !salt) {
+    return '';
+  }
+  const tempSalt = Buffer.from(salt, 'base64');
+  console.log('tempSalt', tempSalt);
+  return (
+    // 10000 代表迭代次数 16代表长度
+    crypto.pbkdf2Sync(password, tempSalt, 10000, 16, 'sha1').toString('base64')
+  );
+}

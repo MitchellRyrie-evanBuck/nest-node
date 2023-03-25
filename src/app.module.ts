@@ -8,7 +8,7 @@ import { ConfigModule } from './config/config.module';
 import { UploadModule } from '@/modules/upload/upload.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './modules/auth/auth.module';
-import { UserEntity } from '@/entities/index'
+import { UserEntity, LoginGurad } from '@/entities/index';
 
 @Module({
   imports: [
@@ -21,14 +21,15 @@ import { UserEntity } from '@/entities/index'
     UploadModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
-      username: 'xiaowen',
-      // password: '809000liuLIU',
-      password: 'xiaowen',
+      username: 'root',
+      // username: 'xiaowen',
+      password: '809000liuLIU',
+      // password: 'xiaowen',
       host: '127.0.0.1',
       port: 3306,
       database: 'node',
       // entities: [__dirname + 'src/**/*.entity{.ts,.js}'],
-      entities: [UserEntity],
+      entities: [UserEntity, LoginGurad],
       synchronize: true,
     }),
     AuthModule,
