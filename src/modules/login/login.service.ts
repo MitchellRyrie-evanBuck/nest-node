@@ -24,7 +24,7 @@ export class LoginService {
   async certificate(user: UserEntity) {
     const payload = {
       id: user.id,
-      nickname: user.username,
+      username: user.username,
       mobile: user.mobile,
     };
     const token = this.jwtService.sign(payload);

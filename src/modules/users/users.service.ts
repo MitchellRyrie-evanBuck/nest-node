@@ -62,4 +62,13 @@ export class UsersService implements ICrudService {
   async deleteOne(id: number) {
     await this.user.delete(id);
   }
+
+  async validateUser(username: string, pass: string): Promise<any> {
+    const user = await this.user.findOne({ where: { username } });
+    if (user && user.password === pass) {
+      const { password, ...result } = user;
+      return result;
+    }
+    return null;
+  }
 }

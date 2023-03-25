@@ -9,7 +9,8 @@ import { UploadModule } from '@/modules/upload/upload.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserEntity, LoginGurad } from '@/entities/index';
-
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from '@/gurad';
 @Module({
   imports: [
     UsersModule,
@@ -35,6 +36,12 @@ import { UserEntity, LoginGurad } from '@/entities/index';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    AppService,
+  ],
 })
 export class AppModule {}
