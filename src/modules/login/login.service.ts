@@ -1,33 +1,60 @@
-import { Injectable, Query } from '@nestjs/common';
-import { CreateLoginDto } from './dto/create-login.dto';
-import { UpdateLoginDto } from './dto/update-login.dto';
+import { Injectable, Query, NotFoundException } from '@nestjs/common';
+import { UpdateLoginDto, CreateLoginDto, LoginDTO } from './dto/';
 import { InjectRepository } from '@nestjs/typeorm';
-
+import { encryptPassword, makeSalt } from '@/utils/cryptogram.util';
 import { Repository, Like } from 'typeorm';
-import { LoginGurad } from './entities/login.entity';
-
-import { Tags } from './entities/tags.entity';
+import { LoginGurad, UserEntity } from '@/entities';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class LoginService {
   constructor(
     @InjectRepository(LoginGurad) private readonly user: Repository<LoginGurad>,
-
-    @InjectRepository(Tags) private readonly tag: Repository<Tags>,
+    @InjectRepository(UserEntity)
+    private readonly userEntity: Repository<UserEntity>,
+    private readonly jwtService: JwtService,
   ) {}
 
-  async addTags(params: { tags: string[]; userId: number }) {
-    const userInfo = await this.user.findOne({ where: { id: params.userId } });
-    const tagList: Tags[] = [];
-    for (let i = 0; i < params.tags.length; i++) {
-      const T = new Tags();
-      T.tags = params.tags[i];
-      await this.tag.save(T);
-      tagList.push(T);
+  async login(loginDTO: LoginDTO): Promise<any> {
+    const user = await this.checkLoginForm(loginDTO);
+    const token = await this.certificate(user);
+    return token;
+  }
+  // 生成 token
+  async certificate(user: UserEntity) {
+    const payload = {
+      id: user.id,
+      nickname: user.username,
+      mobile: user.mobile,
+    };
+    const token = this.jwtService.sign(payload);
+    return token;
+  }
+
+  // 登陆校验用户信息
+  async checkLoginForm(loginDTO: LoginDTO): Promise<any> {
+    const { mobile, password } = loginDTO;
+    const user = await this.userEntity
+      .createQueryBuilder('user')
+      .addSelect('user.salt')
+      .addSelect('user.password')
+      .where('user.mobile = :mobile', { mobile })
+      .getOne();
+
+    if (!user) {
+      throw new NotFoundException('用户不存在');
     }
-    userInfo.tags = tagList;
-    console.log(userInfo, 1);
-    return this.user.save(userInfo);
+    const { password: dbPassword, salt } = user;
+    const currentHashPassword = encryptPassword(password, salt);
+    if (currentHashPassword !== dbPassword) {
+      throw new NotFoundException('密码错误');
+    }
+
+    return user;
+  }
+
+  async addTags(params: { tags: string[]; userId: number }) {
+    return '';
   }
 
   create(createLoginDto: CreateLoginDto) {

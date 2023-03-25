@@ -9,7 +9,7 @@ import { Response } from '@/common/response';
 import { HttpFilter } from '@/common/filter';
 import { join } from 'path';
 import { LoginGuard } from '@/modules/login/login.guard';
-import { HttpExceptionFilter } from '@/filters/http-exception.filter'
+import { HttpExceptionFilter } from '@/filters/http-exception.filter';
 import { TransformInterceptor } from '@/Interceptor/transform.interceptor';
 
 const whiteList = ['/list'];
@@ -51,7 +51,7 @@ async function bootstrap() {
   app.use(middleWareAll);
   SwaggerModule.setup('/api/docs', app, document);
   // app.useGlobalInterceptors(new Response());
-  // app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe());
   // app.useGlobalFilters(new HttpFilter());
   // app.useGlobalGuards(new LoginGuard()); // 全局守卫
   // app.useGlobalFilters(new HttpExceptionFilter());

@@ -9,7 +9,6 @@ import {
   JoinColumn,
   OneToMany,
 } from 'typeorm';
-import { Tags } from './tags.entity';
 @Entity()
 export class LoginGurad {
   @PrimaryGeneratedColumn()
@@ -26,9 +25,5 @@ export class LoginGurad {
 
   @CreateDateColumn({ type: 'timestamp' })
   createTime: Date;
-
-  @OneToMany(() => Tags, (tags) => tags.user)
-  tags: Tags[];
-  // example: example
 }
 export class Login {}
