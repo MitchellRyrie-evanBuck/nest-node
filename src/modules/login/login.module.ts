@@ -14,6 +14,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './local.strategy';
+import { UsersService } from '../users/users.service';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from '@/gurad';
 
@@ -29,15 +30,7 @@ import { JwtAuthGuard } from '@/gurad';
     // PassportModule,
   ],
   controllers: [LoginController],
-  providers: [
-    LoginService,
-    JwtStrategy,
-    LocalStrategy,
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: JwtAuthGuard,
-    // },
-  ],
+  providers: [LoginService, JwtStrategy, LocalStrategy, UsersService],
   exports: [LoginService],
 })
 export class LoginModule implements NestModule {
