@@ -34,6 +34,7 @@ import {
   ApiOkResponse,
 } from '@nestjs/swagger';
 import { TokenResponse } from './results';
+import { Public } from '@/decorator/index';
 
 @Controller({ path: 'login', version: '1' })
 @ApiTags('登录接口')
@@ -42,6 +43,7 @@ import { TokenResponse } from './results';
 export class LoginController {
   constructor(private readonly loginService: LoginService) {}
 
+  @Public()
   @ApiOperation({
     summary: '获取验证码',
     description: '请求该接口获取code验证码',
@@ -63,6 +65,7 @@ export class LoginController {
   }
 
   @Post('')
+  @Public()
   @ApiBody({ type: LoginDTO })
   @ApiOkResponse({ description: '登陆', type: TokenResponse })
   loginAdmin(@Req() req, @Body() body: LoginDTO) {
