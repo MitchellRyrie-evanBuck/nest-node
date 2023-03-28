@@ -4,11 +4,12 @@ import { AppService } from './app.service';
 import { UsersModule } from '@/modules/users/users.module';
 import { AdminModule } from '@/modules/admin/admin.module';
 import { LoginModule } from '@/modules/login/login.module';
+import { TagsModule } from '@/modules/tags/tags.module';
 import { ConfigModule } from './config/config.module';
 import { UploadModule } from '@/modules/upload/upload.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './modules/auth/auth.module';
-import { UserEntity, LoginGurad } from '@/entities/index';
+import { UserEntity, LoginGurad, TagsEntity } from '@/entities/index';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from '@/gurad';
 @Module({
@@ -30,10 +31,11 @@ import { JwtAuthGuard } from '@/gurad';
       port: 3306,
       database: 'node',
       // entities: [__dirname + 'src/**/*.entity{.ts,.js}'],
-      entities: [UserEntity, LoginGurad],
+      entities: [UserEntity, LoginGurad, TagsEntity],
       synchronize: true,
     }),
     AuthModule,
+    TagsModule,
   ],
   controllers: [AppController],
   providers: [

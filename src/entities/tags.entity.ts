@@ -5,7 +5,10 @@ import {
   Generated,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  ManyToMany,
 } from 'typeorm';
+
+import { UserEntity } from './user.entity';
 
 @Entity('tags')
 export class TagsEntity {
@@ -23,6 +26,9 @@ export class TagsEntity {
     comment: 'tag名称',
   })
   tagname: string;
+
+  @ManyToMany((type) => UserEntity, (album) => album.tags)
+  author: UserEntity[];
 
   // 软删除
   @Column({
@@ -42,8 +48,3 @@ export class TagsEntity {
   })
   updateAt: Date;
 }
-
-
-
-
-

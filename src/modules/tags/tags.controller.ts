@@ -1,15 +1,30 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { TagsService } from './tags.service';
-import { CreateTagDto } from './dto/create-tag.dto';
-import { UpdateTagDto } from './dto/update-tag.dto';
+import { CreateTagDto, UpdateTagDto } from './dto/index';
+import { ApiTags } from '@nestjs/swagger';
+import { Public } from '@/decorator';
 
-@Controller('tags')
+@Controller({
+  path: 'tags',
+  version: '1',
+})
+@ApiTags('标签接口')
 export class TagsController {
   constructor(private readonly tagsService: TagsService) {}
 
-  @Post()
-  create(@Body() createTagDto: CreateTagDto) {
-    return this.tagsService.create(createTagDto);
+  @Public()
+  @Post('create-tags')
+  async create(@Body() createTagDto: CreateTagDto) {
+    await this.tagsService.create(createTagDto);
+    return true;
   }
 
   @Get()
