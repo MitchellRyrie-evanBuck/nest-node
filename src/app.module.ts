@@ -12,6 +12,8 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UserEntity, LoginGurad, TagsEntity } from '@/entities/index';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from '@/gurad';
+import { RedisCacheModule } from '@/db/redis-cache.module'
+
 @Module({
   imports: [
     UsersModule,
@@ -23,10 +25,10 @@ import { JwtAuthGuard } from '@/gurad';
     UploadModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
-      username: 'root',
-      // username: 'xiaowen',
-      password: '809000liuLIU',
-      // password: 'xiaowen',
+      // username: 'root',
+      username: 'xiaowen',
+      // password: '809000liuLIU',
+      password: 'xiaowen',
       host: '127.0.0.1',
       port: 3306,
       database: 'node',
@@ -36,6 +38,7 @@ import { JwtAuthGuard } from '@/gurad';
     }),
     AuthModule,
     TagsModule,
+    RedisCacheModule
   ],
   controllers: [AppController],
   providers: [
