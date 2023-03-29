@@ -6,6 +6,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   ManyToMany,
+  ManyToOne,
+  JoinTable
 } from 'typeorm';
 
 import { UserEntity } from './user.entity';
@@ -27,7 +29,8 @@ export class TagsEntity {
   })
   tagname: string;
 
-  @ManyToMany((type) => UserEntity, (album) => album.tags)
+  @ManyToMany((type) => UserEntity, (user) => user.tags)
+  @JoinTable()
   author: UserEntity[];
 
   // 软删除

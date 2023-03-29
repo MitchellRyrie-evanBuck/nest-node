@@ -4,9 +4,11 @@ import {
   Entity,
   Generated,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   JoinTable,
+  JoinColumn
 } from 'typeorm';
 
 import { GenderEnum } from '@/enums';
@@ -29,7 +31,7 @@ export class UserEntity {
   })
   username: string;
 
-  @ManyToMany((type) => TagsEntity, (tags) => tags.author)
+  @ManyToMany((type) => TagsEntity, (tags) => tags.tagname)
   @JoinTable()
   tags: TagsEntity[];
 
