@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   JoinTable,
-  JoinColumn
+  JoinColumn,
 } from 'typeorm';
 
 import { GenderEnum } from '@/enums';
