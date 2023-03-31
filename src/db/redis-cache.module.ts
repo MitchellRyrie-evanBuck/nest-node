@@ -15,7 +15,7 @@ import * as redisStore from 'cache-manager-redis-store';
           host: configService.get('REDIS_HOST'),
           port: configService.get('REDIS_PORT'),
           db: 0, //目标库,
-          auth_pass: configService.get('REDIS_PASSPORT') // 密码,没有可以不写
+          auth_pass: configService.get('REDIS_PASSPORT'), // 密码,没有可以不写
         };
       },
     }),
@@ -23,4 +23,4 @@ import * as redisStore from 'cache-manager-redis-store';
   providers: [RedisCacheService],
   exports: [RedisCacheService],
 })
-export class RedisCacheModule { }
+export class RedisCacheModule {}
