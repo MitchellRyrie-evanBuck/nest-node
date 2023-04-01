@@ -38,7 +38,7 @@ import {
   FindUsersResult,
   PaginateResult,
   UpdateUserResult,
-  CreateTagsResult
+  CreateTagsResult,
 } from './results';
 
 import {
@@ -47,7 +47,7 @@ import {
   FindUserDTO,
   PaginateUserDTO,
   UpdateUserDTO,
-  CreateTagsDTO
+  CreateTagsDTO,
 } from './dto';
 
 import { PaginateSerialize, UserSerialize } from './serializes';
