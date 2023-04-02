@@ -3,11 +3,16 @@ import {
   CreateDateColumn,
   Entity,
   Generated,
+  ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  JoinTable,
+  JoinColumn,
 } from 'typeorm';
 
 import { GenderEnum } from '@/enums';
+import { TagsEntity } from './tags.entity';
 
 @Entity('user')
 export class UserEntity {
@@ -25,6 +30,10 @@ export class UserEntity {
     comment: '用户账号',
   })
   username: string;
+
+  @ManyToMany((type) => TagsEntity, (tags) => tags.tagname)
+  @JoinTable()
+  tags: TagsEntity[];
 
   // 软删除
   @Column({

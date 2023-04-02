@@ -38,6 +38,7 @@ import {
   FindUsersResult,
   PaginateResult,
   UpdateUserResult,
+  CreateTagsResult,
 } from './results';
 
 import {
@@ -46,11 +47,13 @@ import {
   FindUserDTO,
   PaginateUserDTO,
   UpdateUserDTO,
+  CreateTagsDTO,
 } from './dto';
 
 import { PaginateSerialize, UserSerialize } from './serializes';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtAuthGuard } from '@/gurad';
+import { Public } from '@/decorator';
 
 @Controller({
   path: 'users',
@@ -103,7 +106,6 @@ export class UsersController {
 
   @Put('/update/:id')
   @ApiOperation({ summary: '更新一个用户' })
-  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({ description: 'OK', type: UpdateUserResult })
   async update(
@@ -118,11 +120,20 @@ export class UsersController {
 
   @Delete('delete/:id')
   @ApiOperation({ summary: '删除一个用户' })
-  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({ description: 'OK', type: DeleteUsersResult })
   async remove(@Param('id') id: string) {
     await this.usersService.deleteOne(+id);
+    return true;
+  }
+
+  @Post('add-tag')
+  @ApiOperation({ summary: '给用户打标签' })
+  @ApiBearerAuth()
+  @Public()
+  @ApiOkResponse({ description: 'OK', type: CreateTagsResult })
+  async addTags(@Body() tagsDTO: CreateTagsDTO) {
+    await this.usersService.addTags(tagsDTO);
     return true;
   }
 }

@@ -3,8 +3,13 @@ import {
   BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateUserDTO, FindUserDTO, UpdateUserDTO } from './dto';
-import { UserEntity } from '@/entities/index';
+import {
+  CreateUserDTO,
+  FindUserDTO,
+  UpdateUserDTO,
+  CreateTagsDTO,
+} from './dto';
+import { UserEntity, TagsEntity } from '@/entities/index';
 import { Repository, Like } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ICrudService } from '@/types';
@@ -14,6 +19,7 @@ import { encryptPassword, makeSalt } from '@/utils/cryptogram.util';
 export class UsersService implements ICrudService {
   constructor(
     @InjectRepository(UserEntity) private readonly user: Repository<UserEntity>,
+    @InjectRepository(TagsEntity) private readonly tags: Repository<TagsEntity>,
   ) {}
 
   async createOne(createUserDto: CreateUserDTO) {
@@ -61,5 +67,43 @@ export class UsersService implements ICrudService {
 
   async deleteOne(id: number) {
     await this.user.delete(id);
+  }
+
+  async validateUser(username: string, pass: string): Promise<any> {
+    const user = await this.user.findOne({ where: { username } });
+    if (user && user.password === pass) {
+      const { password, ...result } = user;
+      return result;
+    }
+    return null;
+  }
+
+  async addTags({ id, tags }: CreateTagsDTO): Promise<any> {
+    const userInfo = await this.user.findOne({ where: { id: Number(id) } });
+    const tagList: TagsEntity[] = [];
+    if (tags.length) {
+      for (let i = 0; i < tags.length; i++) {
+        // const T = new TagsEntity();
+        const tagsEnty = await this.tags.findOne({
+          where: { id: Number(tags[i]) },
+        });
+        if (!tagsEnty) {
+          new BadRequestException(`${tags[i]} id 不存在`);
+        }
+        if (tagsEnty.author) {
+          tagsEnty.author = [...tagsEnty.author, userInfo] as UserEntity[];
+        } else {
+          tagsEnty.author = [userInfo] as UserEntity[];
+        }
+        console.log(tagsEnty);
+        // T.tags = tags[i];
+        await this.tags.save(tagsEnty);
+        tagList.push(tagsEnty);
+      }
+    }
+
+    userInfo.tags = tagList;
+    console.log(userInfo, 1);
+    return this.user.save(userInfo);
   }
 }
