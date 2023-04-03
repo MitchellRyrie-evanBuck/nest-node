@@ -11,11 +11,11 @@ import * as redisStore from 'cache-manager-redis-store';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
         return {
-          store: redisStore,
-          host: configService.get('REDIS_HOST'),
-          port: configService.get('REDIS_PORT'),
+          // store: redisStore,
+          host: '127.0.0.1',
+          port: 6379,
           db: 0, //目标库,
-          auth_pass: configService.get('REDIS_PASSPORT'), // 密码,没有可以不写
+          // auth_pass: configService.get('REDIS_PASSWORD'), // 密码,没有可以不写
         };
       },
     }),

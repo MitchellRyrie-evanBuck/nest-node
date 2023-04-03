@@ -8,14 +8,21 @@ import { extname, resolve } from 'path';
 import { IConfig } from '@/types';
 
 /** 静态文件目录 */
-const STATIC_PATH = 'static';
+const STATIC_PATH = 'assets';
 /** 上传文件目录 */
-const UPLOAD_PATH = 'static/upload';
+const UPLOAD_PATH = 'assets/upload';
 
 function initDirs() {
   sync(UPLOAD_PATH);
 }
 initDirs();
+
+const redisConfig = {
+  host: '127.0.0.1',
+  port: 6379,
+  redis_db: 0,
+  password: '',
+};
 
 export default registerAs<IConfig>(
   '',
@@ -28,6 +35,8 @@ export default registerAs<IConfig>(
       ttl: 5,
       max: 20,
     },
+    redisConfig,
+    redisClusterConfig: [redisConfig],
     casbin: {
       path: resolve('res/model.conf'),
       config: {

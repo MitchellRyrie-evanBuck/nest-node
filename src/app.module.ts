@@ -12,7 +12,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UserEntity, LoginGurad, TagsEntity } from '@/entities/index';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from '@/gurad';
-import { RedisCacheModule } from '@/db/redis-cache.module'
+import { RedisCacheModule } from '@/db/redis-cache.module';
 
 @Module({
   imports: [
@@ -38,7 +38,7 @@ import { RedisCacheModule } from '@/db/redis-cache.module'
     }),
     AuthModule,
     TagsModule,
-    RedisCacheModule
+    // RedisCacheModule,
   ],
   controllers: [AppController],
   providers: [
