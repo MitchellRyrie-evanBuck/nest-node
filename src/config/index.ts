@@ -7,6 +7,5 @@ const ENV_CONFIG = {
   production,
   testing,
 };
-
 export default ENV_CONFIG[process.env.NODE_ENV];
 // export * from './services';
