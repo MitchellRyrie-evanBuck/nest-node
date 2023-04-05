@@ -57,7 +57,7 @@ export class LoginController {
       fontSize: 50, //文字大小
       width: 100, //宽度
       height: 34, //高度
-      background: '#cc9966', //背景颜色
+      background: '#FFFFFF', //背景颜色
     });
     req.session.code = captcha.text; //存储验证码记录到session
     res.type('image/svg+xml');
