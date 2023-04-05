@@ -19,6 +19,10 @@ export type IConfig = {
   };
   /** 缓存配置 */
   cache?: CacheModuleOptions;
+  /** 缓存redus 基础配置 */
+  redisConfig?: CacheModuleOptions;
+  /** 缓存redus 集群 基础配置 */
+  redisClusterConfig?: CacheModuleOptions[];
   /** 权限控制配置 */
   casbin?: CasbinModuleOptions;
   /** 鉴权配置 */
