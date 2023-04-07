@@ -11,9 +11,6 @@ export class AppController {
 
   @Get()
   getHello(): string {
-    return (
-      this.appService.getHello() +
-      this.loginService.findAll({ keyWord: 'lui', page: 1, pageSize: 10 })
-    );
+    return this.appService.getHello();
   }
 }

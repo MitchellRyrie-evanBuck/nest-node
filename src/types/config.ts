@@ -1,42 +1,46 @@
-import { CacheModuleOptions } from '@nestjs/common'
-import { JwtModuleOptions } from '@nestjs/jwt'
-import { AuthModuleOptions } from '@nestjs/passport'
-import { MulterModuleOptions } from '@nestjs/platform-express'
-import { ServeStaticOptions } from '@nestjs/platform-express/interfaces/serve-static-options.interface'
-import { OpenAPIObject } from '@nestjs/swagger'
-import { ThrottlerModuleOptions } from '@nestjs/throttler'
-import { TypeOrmModuleOptions } from '@nestjs/typeorm'
+import { CacheModuleOptions } from '@nestjs/common';
+import { JwtModuleOptions } from '@nestjs/jwt';
+import { AuthModuleOptions } from '@nestjs/passport';
+import { MulterModuleOptions } from '@nestjs/platform-express';
+import { ServeStaticOptions } from '@nestjs/platform-express/interfaces/serve-static-options.interface';
+import { OpenAPIObject } from '@nestjs/swagger';
+import { ThrottlerModuleOptions } from '@nestjs/throttler';
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
-// import { CasbinModuleOptions } from '@/packages'
+import { CasbinModuleOptions } from '@/packages';
 
 export type IConfig = {
   /** 端口 */
-  port: number
+  port: number;
   /** 静态资源配置 */
   static?: {
-    path?: string
-    config?: ServeStaticOptions
-  }
+    path?: string;
+    config?: ServeStaticOptions;
+  };
   /** 缓存配置 */
-  cache?: CacheModuleOptions
+  cache?: CacheModuleOptions;
+  /** 缓存redus 基础配置 */
+  redisConfig?: CacheModuleOptions;
+  /** 缓存redus 集群 基础配置 */
+  redisClusterConfig?: CacheModuleOptions[];
   /** 权限控制配置 */
-  // casbin?: CasbinModuleOptions
+  casbin?: CasbinModuleOptions;
   /** 鉴权配置 */
-  passport?: AuthModuleOptions
+  passport?: AuthModuleOptions;
   /** JSON Web Token 配置 */
-  jwt?: JwtModuleOptions
+  jwt?: JwtModuleOptions;
   /** 上传配置 */
-  multer?: MulterModuleOptions
+  multer?: MulterModuleOptions;
   /** 数据库配置 */
-  typeorm?: TypeOrmModuleOptions
+  typeorm?: TypeOrmModuleOptions;
   /** 连接限制配置 */
-  throttler?: ThrottlerModuleOptions
+  throttler?: ThrottlerModuleOptions;
   /** 接口文档 */
   swagger?: {
-    path?: string
+    path?: string;
     config?: Pick<
       OpenAPIObject,
       'openapi' | 'info' | 'servers' | 'security' | 'tags' | 'externalDocs'
-    >
-  }
-}
+    >;
+  };
+};

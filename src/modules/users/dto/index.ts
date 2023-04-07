@@ -3,3 +3,4 @@ export * from './delete-users.dto';
 export * from './find-user.dto';
 export * from './paginate-user.dto';
 export * from './update-user.dto';
+export * from './create-tags.dto'

@@ -5,6 +5,7 @@ import { encryptPassword, makeSalt } from '@/utils/cryptogram.util';
 import { Repository, Like } from 'typeorm';
 import { LoginGurad, UserEntity } from '@/entities';
 import { JwtService } from '@nestjs/jwt';
+import { RedisInstance } from '@/db';
 
 @Injectable()
 export class LoginService {
@@ -18,13 +19,16 @@ export class LoginService {
   async login(loginDTO: LoginDTO): Promise<any> {
     const user = await this.checkLoginForm(loginDTO);
     const token = await this.certificate(user);
+    const redis = await RedisInstance.initRedis();
+    redis.set(String(user.mobile), token);
+    redis.expire(String(user.mobile), 60 * 60 * 24);
     return token;
   }
   // 生成 token
   async certificate(user: UserEntity) {
     const payload = {
       id: user.id,
-      nickname: user.username,
+      username: user.username,
       mobile: user.mobile,
     };
     const token = this.jwtService.sign(payload);
