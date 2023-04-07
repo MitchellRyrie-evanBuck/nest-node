@@ -56,6 +56,8 @@ async function bootstrap() {
   // app.useGlobalGuards(new LoginGuard()); // 全局守卫
   // app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalInterceptors(new TransformInterceptor());
-  await app.listen(3000);
+  await app.listen(3000, () => {
+    console.log('listening on http://localhost:3000');
+  });
 }
 bootstrap();
