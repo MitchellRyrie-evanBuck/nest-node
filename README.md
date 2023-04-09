@@ -41,3 +41,8 @@ $ npm run test:cov
 $ redis-server
 $ redis-cli (test)
 ```
+
+## docker
+```
+
+```
