@@ -42,7 +42,7 @@ $ redis-server
 $ redis-cli (test)
 ```
 
-## docker
+## docker-
 ```
 
 ```
