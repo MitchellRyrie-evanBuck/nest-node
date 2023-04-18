@@ -47,7 +47,7 @@ $ redis-cli (test)
 
 ```
 
-## redis
+## redis-
 ```
 
 ```
