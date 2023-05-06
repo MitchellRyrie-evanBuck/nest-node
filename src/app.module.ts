@@ -5,7 +5,7 @@ import { UsersModule } from '@/modules/users/users.module';
 import { AdminModule } from '@/modules/admin/admin.module';
 import { LoginModule } from '@/modules/login/login.module';
 import { TagsModule } from '@/modules/tags/tags.module';
-import { ConfigModule } from './config/config.module';
+// import { ConfigModule } from './config/config.module';
 import { UploadModule } from '@/modules/upload/upload.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './modules/auth/auth.module';
@@ -19,16 +19,16 @@ import { RedisCacheModule } from '@/db/redis-cache.module';
     UsersModule,
     AdminModule,
     LoginModule,
-    ConfigModule.forRoot({
-      path: 'AFL',
-    }),
+    // ConfigModule.forRoot({
+    //   path: 'AFL',
+    // }),
     UploadModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
-      // username: 'root',
-      username: 'xiaowen',
-      // password: '809000liuLIU',
-      password: 'xiaowen',
+      username: 'root',
+      // username: 'xiaowen',
+      password: '809000liuLIU',
+      // password: 'xiaowen',
       host: '127.0.0.1',
       port: 3306,
       database: 'node',

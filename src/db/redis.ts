@@ -1,6 +1,9 @@
 import Redis from 'ioredis';
 
 import config from '@/config';
+
+console.log(config, '-------');
+
 const { redisConfig, redisClusterConfig } = config;
 export class RedisInstance {
   static async initRedis(connectType?: string) {
